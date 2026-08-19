@@ -1,0 +1,101 @@
+<Window x:Class="MASA.Screenshot.App.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MASA Screenshot — Preferences &amp; Settings"
+        Height="620" Width="680"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBackgroundBrush}">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Settings Tabs / Sections -->
+            <RowDefinition Height="*"/>
+            <!-- Footer Buttons -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Settings &amp; Configuration" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+
+        <!-- Settings Cards inside ScrollViewer -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical">
+
+                <!-- Capture Options Card -->
+                <Border Background="{StaticResource CardBackgroundBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Capture Behavior" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+
+                        <CheckBox Content="Include Mouse Cursor in Captures" IsChecked="{Binding Settings.IncludeCursor}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4"/>
+                        <CheckBox Content="Include Window Border &amp; Shadow" IsChecked="{Binding Settings.IncludeWindowShadow}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4"/>
+                        <CheckBox Content="Copy Image to Clipboard Immediately" IsChecked="{Binding Settings.CopyToClipboardOnCapture}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4"/>
+                        <CheckBox Content="Open Annotator Editor After Capture" IsChecked="{Binding Settings.OpenEditorAfterCapture}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Storage & Privacy Card -->
+                <Border Background="{StaticResource CardBackgroundBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Storage &amp; Privacy" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+
+                        <CheckBox Content="Auto-Save captures to disk" IsChecked="{Binding Settings.AutoSave}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4"/>
+                        <CheckBox Content="🛡️ Strict Privacy Mode (No disk history, local memory only)" IsChecked="{Binding Settings.PrivacyMode}" Foreground="#FF4D4D" FontWeight="SemiBold" Margin="0,4"/>
+
+                        <TextBlock Text="Save Location Directory:" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,8,0,2"/>
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding Settings.SaveLocation, Mode=TwoWay}" Height="30" VerticalContentAlignment="Center" Background="#1C1C1C" Foreground="White" BorderBrush="{StaticResource CardBorderBrush}"/>
+                            <Button Grid.Column="1" Content="Browse..." Style="{StaticResource ModernButton}" Margin="6,0,0,0" Command="{Binding BrowseFolderCommand}"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Hotkeys Card -->
+                <Border Background="{StaticResource CardBackgroundBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Global Hotkeys" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+                        <CheckBox Content="Enable Global Keyboard Shortcuts" IsChecked="{Binding Settings.HotkeysEnabled}" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4"/>
+
+                        <Grid Margin="0,8,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Area Capture:" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,4"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="PrintScreen" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,4"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Full Screen:" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,4"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="Ctrl + PrintScreen" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,4"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Active Window:" Foreground="{StaticResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="0,4"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="Alt + PrintScreen" Foreground="{StaticResource AccentBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,4"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Margin="0,16,0,0">
+            <Grid>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center" FontSize="12"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Reset Defaults" Style="{StaticResource ModernButton}" Margin="0,0,8,0" Command="{Binding ResetDefaultsCommand}"/>
+                    <Button Content="Save Settings" Style="{StaticResource AccentButton}" Command="{Binding SaveSettingsCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

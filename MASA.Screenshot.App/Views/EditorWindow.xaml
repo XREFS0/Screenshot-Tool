@@ -1,0 +1,103 @@
+<Window x:Class="MASA.Screenshot.App.Views.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:MASA.Screenshot.App.Controls"
+        Title="MASA Screenshot — Image Editor &amp; Annotator"
+        Height="780" Width="1200"
+        MinHeight="600" MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource WindowBackgroundBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Modern Toolbar -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content & Canvas -->
+            <RowDefinition Height="*"/>
+            <!-- Status Bar -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Tool Bar -->
+        <Border Grid.Row="0" Background="{StaticResource ToolbarBackgroundBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="0,0,0,1" Padding="8,6">
+            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- Drawing Tools Group -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                    <Button Content="✋ Select" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Select"/>
+                    <Button Content="✏️ Pen" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Pen"/>
+                    <Button Content="🖍️ Highl." Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Highlighter"/>
+                    <Button Content="➡️ Arrow" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Arrow"/>
+                    <Button Content="⬜ Rect" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Rectangle"/>
+                    <Button Content="⭕ Circle" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Ellipse"/>
+                    <Button Content="📏 Line" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Line"/>
+                    <Button Content="🔤 Text" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Text"/>
+                    <Button Content="🔢 Step" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="StepNumber"/>
+                </StackPanel>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="6,0"/>
+
+                <!-- Privacy & Redaction Tools Group -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                    <Button Content="💧 Blur" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Blur"/>
+                    <Button Content="🔲 Pixelate" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding SelectToolCommand}" CommandParameter="Pixelate"/>
+                    <Button Content="🛡️ Smart Redact" Style="{StaticResource AccentButton}" Margin="2" Command="{Binding SmartRedactCommand}"/>
+                </StackPanel>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="6,0"/>
+
+                <!-- Transform Tools Group -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                    <Button Content="🔄 90°" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding RotateRightCommand}" ToolTip="Rotate 90° Clockwise"/>
+                    <Button Content="↔️ Flip H" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding FlipHorizontalCommand}"/>
+                    <Button Content="↕️ Flip V" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding FlipVerticalCommand}"/>
+                </StackPanel>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="6,0"/>
+
+                <!-- Edit History -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                    <Button Content="↩️ Undo" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding UndoCommand}"/>
+                    <Button Content="↪️ Redo" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding RedoCommand}"/>
+                    <Button Content="🗑️ Clear" Style="{StaticResource ModernButton}" Margin="2" Command="{Binding ClearAllCommand}"/>
+                </StackPanel>
+
+                <!-- Actions -->
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="📋 Copy Image" Style="{StaticResource AccentButton}" Margin="4,2" Command="{Binding CopyToClipboardCommand}"/>
+                    <Button Content="💾 Save" Style="{StaticResource ModernButton}" Margin="4,2" Command="{Binding SaveCommand}"/>
+                </StackPanel>
+            </WrapPanel>
+        </Border>
+
+        <!-- Canvas Area inside ScrollViewer -->
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Background="#181818">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+                <controls:AnnotationCanvas x:Name="CanvasControl" MouseMove="CanvasControl_MouseMove"/>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- Bottom Status Bar & Color Picker Info -->
+        <Border Grid.Row="2" Background="{StaticResource ToolbarBackgroundBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="12,6">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,16,0"/>
+                    <TextBlock Text="{Binding ImageDetails}" Foreground="{StaticResource TextPrimaryBrush}" FontWeight="SemiBold" FontSize="12"/>
+                </StackPanel>
+
+                <!-- Live Color Picker HUD -->
+                <StackPanel Orientation="Horizontal" Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="🎨 Color Inspector: " Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding ColorInfoHex}" Foreground="{StaticResource AccentBrush}" FontWeight="Bold" FontSize="12" Margin="4,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding ColorInfoRgb}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding ColorInfoHsl}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="4,0" VerticalAlignment="Center"/>
+                    <Button Content="Copy HEX" Style="{StaticResource ModernButton}" Margin="8,0,0,0" Padding="8,3" FontSize="11" Command="{Binding CopyHexCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

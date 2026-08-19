@@ -1,0 +1,27 @@
+# Visual Studio / .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+_ReSharper*/
+*.suo
+*.userprefs
+TestResults/
+
+# Logs & Temporary Local Output
+*.log
+Thumbnails/
+
+# Build artifacts
+MASA.Screenshot.App/bin/
+MASA.Screenshot.App/obj/
+MASA.Screenshot.Application/bin/
+MASA.Screenshot.Application/obj/
+MASA.Screenshot.Core/bin/
+MASA.Screenshot.Core/obj/
+MASA.Screenshot.Infrastructure/bin/
+MASA.Screenshot.Infrastructure/obj/
+MASA.Screenshot.Tests/bin/
+MASA.Screenshot.Tests/obj/
